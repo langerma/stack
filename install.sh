@@ -1,6 +1,8 @@
 #!/bin/bash
 
 set -e
+set -u
+set -o pipefail
 set -x
 
 apt() {
@@ -10,6 +12,9 @@ apt() {
         command apt --yes "$@"
     )
 }
+
+# https://github.com/bitnami/minideb/blob/master/mkimage
+echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/force-unsafe-io
 
 sc-disable() {
     for service in "$@"; do
@@ -32,7 +37,7 @@ apt dist-upgrade --purge
 apt-mark auto $(apt-mark showmanual)
 
 # install everything we need
-apt install \
+apt install --no-install-recommends \
     docker-compose \
     docker.io \
     hddtemp \
@@ -51,6 +56,7 @@ apt install \
 
 # cleanup
 apt autoremove --purge
+apt clean
 
 rm -rfv \
     /var/lib/command-not-found \
