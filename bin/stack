@@ -29,7 +29,8 @@ for name, overrides in config["services"].items():
             "context": dirname,
         },
         "container_name": name,
-        "hostname": config["domain"],
+        "domainname": config["domain"],
+        "hostname": name,
         "image": "{}/{}".format(
             config["docker"]["repository"],
             name,

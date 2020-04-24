@@ -7,15 +7,9 @@ volumes:
   - type: volume
     source: home
     target: /root
-  # - type: bind
-  #   source: /backup
-  #   target: /backup
-  # - type: bind
-  #   source: /data
-  #   target: /data
-  # - type: bind
-  #   source: /stack
-  #   target: /stack
-  # - type: bind
-  #   source: /var/run/docker.sock
-  #   target: /var/run/docker.sock
+  - type: bind
+    source: ./
+    target: /stack
+  - type: bind
+    source: /var/run/docker.sock
+    target: /var/run/docker.sock
