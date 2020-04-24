@@ -25,6 +25,12 @@ sc-disable \
     atd \
     unattended-upgrades
 
+# make our system lean
+cat > /etc/apt/apt.conf.d/99no-recommended <<EOF
+APT::Install-Suggests "0";
+APT::Install-Recommends "0";
+EOF
+
 # system upgrade
 apt-get update
 apt-get upgrade --purge
@@ -34,17 +40,17 @@ apt-get dist-upgrade --purge
 apt-mark auto $(apt-mark showmanual)
 
 # install everything we need
-apt-get install --no-install-recommends \
+apt-get install \
     docker-compose \
-    docker.io \
     hddtemp \
     iotop \
-    ipcalc \
     lm-sensors \
     ncdu \
     net-tools \
     nmap \
+    openssh-server \
     powertop \
+    python3-pip \
     ubuntu-minimal \
     ubuntu-server \
     ubuntu-standard \
