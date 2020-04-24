@@ -20,12 +20,6 @@ def merge(a, b):
 
 config = load("config.yaml")
 
-# generate authorized keys for ssh
-with open("ssh/authorized_keys", "w") as file:
-    for key in config["ssh"]["authorized_keys"]:
-        file.write(key)
-        file.write("\n")
-
 # generate stack compose file
 for name, overrides in config["services"].items():
     dirname = name.replace("-", "/")

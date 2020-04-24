@@ -16,8 +16,7 @@ LogLevel VERBOSE
 # ===================
 Protocol 2
 StrictModes yes
-HostKey /etc/ssh/ssh_host_rsa_key
-HostKey /etc/ssh/ssh_host_ed25519_key
+HostKey /ssh/ssh_host_ed25519_key
 
 # Cryptography
 # ===================
@@ -40,7 +39,7 @@ IgnoreUserKnownHosts no
 PermitEmptyPasswords no
 ChallengeResponseAuthentication no
 PasswordAuthentication no
-AuthorizedKeysFile /etc/ssh/ssh_authorized_keys
+AuthorizedKeysFile /ssh/ssh_authorized_keys
 
 # Environment
 # ===================

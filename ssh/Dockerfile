@@ -77,7 +77,8 @@ RUN export TERM=dumb DEBIAN_FRONTEND=noninteractive \
 RUN export TERM=dumb DEBIAN_FRONTEND=noninteractive \
     && apt-get -y autoremove \
     && apt-get -y clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /etc/ssh/ssh_host_*_key*
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/v1.22.1.0/s6-overlay-amd64.tar.gz /tmp/s6-overlay-amd64.tar.gz
 RUN export TERM=dumb DEBIAN_FRONTEND=noninteractive \
@@ -87,7 +88,7 @@ RUN export TERM=dumb DEBIAN_FRONTEND=noninteractive \
 
 RUN echo root:$(openssl rand -base64 32) | chpasswd \
     && chsh -s /usr/bin/zsh root \
-    && mkdir -p /run/sshd
+    && mkdir -p /ssh /run/sshd
 
 COPY rootfs /
 

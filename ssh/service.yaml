@@ -3,10 +3,7 @@ networks:
 volumes:
   - type: volume
     source: config
-    target: /etc/ssh
-  - type: bind
-    source: ./ssh/authorized_keys
-    target: /etc/ssh/ssh_authorized_keys
+    target: /ssh
   - type: volume
     source: home
     target: /root
