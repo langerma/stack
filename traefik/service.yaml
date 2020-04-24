@@ -1,0 +1,32 @@
+command:
+  - "--global.checkNewVersion=false"
+  - "--global.sendAnonymousUsage=false"
+  - "--log.level=INFO"
+  - "--api.insecure=true"
+  - "--api.dashboard=true"
+  - "--api.debug=false"
+  - "--ping.entrypoint=http"
+  - "--providers.file.filename=/etc/traefik/dynamic.toml"
+  - "--providers.file.watch=true"
+  - "--providers.docker.exposedbydefault=false"
+  - "--providers.docker.network=internal"
+  - "--serversTransport.insecureskipverify=true"
+  - "--entryPoints.http.address=:80"
+  - "--entryPoints.https.address=:443"
+  - "--certificatesresolvers.default.acme.storage=/config/acme.json"
+  - "--certificatesresolvers.default.acme.tlschallenge=true"
+labels:
+  traefik.enable: "true"
+  traefik.http.routers.traefik.middlewares: default@file,traefik-auth
+  traefik.http.routers.traefik.entrypoints: https
+  traefik.http.routers.traefik.service: api@internal
+  traefik.http.middlewares.traefik-auth.basicauth.users: "hostmaster:!"
+networks:
+  internal:
+volumes:
+  - type: volume
+    source: config
+    target: /config
+  - type: bind
+    source: /var/run/docker.sock
+    target: /var/run/docker.sock
