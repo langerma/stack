@@ -1,0 +1,24 @@
+networks:
+  internal:
+volumes:
+  - type: volume
+    source: config
+    target: /etc/ssh
+  - type: bind
+    source: ./ssh/authorized_keys
+    target: /etc/ssh/ssh_authorized_keys
+  - type: volume
+    source: home
+    target: /root
+  # - type: bind
+  #   source: /backup
+  #   target: /backup
+  # - type: bind
+  #   source: /data
+  #   target: /data
+  # - type: bind
+  #   source: /stack
+  #   target: /stack
+  # - type: bind
+  #   source: /var/run/docker.sock
+  #   target: /var/run/docker.sock

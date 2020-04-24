@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+
+import yaml
+from deepmerge import always_merger
+
+os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+
+def load(file: str):
+    with open(file) as stream:
+        return yaml.load(stream.read(), Loader=yaml.FullLoader)
+
+
+def merge(a, b):
+    return always_merger.merge(a, b)
+
+
+config = load("config.yaml")
+
+# generate authorized keys for ssh
+with open("ssh/authorized_keys", "w") as file:
+    for key in config["ssh"]["authorized_keys"]:
+        file.write(key)
+        file.write("\n")
+
+# generate stack compose file
+for name, overrides in config["services"].items():
+    dirname = name.replace("-", "/")
+
+    config["services"][name] = {
+        "build": {
+            "context": dirname,
+        },
+        "container_name": name,
+        "hostname": config["domain"],
+        "image": "{}/{}".format(
+            config["docker"]["repository"],
+            name,
+        ),
+        "networks": {},
+        "restart": "always",
+        "volumes": {},
+    }
+
+    config["services"][name] = merge(config["services"][name], load(
+        "{}/service.yaml".format(dirname)))
+
+    config["services"][name] = merge(config["services"][name], overrides)
+
+    volumes = []
+
+    for volume in config["services"][name]["volumes"]:
+        if volume["type"] != "volume":
+            continue
+
+        volume["source"] = "{}_{}".format(name, volume["source"])
+
+        if volume["source"] not in config["volumes"]:
+            config["volumes"][volume["source"]] = {
+                "name": volume["source"],
+            }
+
+        volumes.append(volume)
+
+with open("stack.yaml", "w") as file:
+    file.write(yaml.dump({
+        "version": "3.7",
+        "services": config["services"],
+        "volumes": config["volumes"],
+        "networks": config["networks"],
+    }))
+
+os.execvp("docker-compose", [
+    "docker-compose",
+    "-f", "stack.yaml",
+] + sys.argv[1:])

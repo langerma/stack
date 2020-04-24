@@ -1,0 +1,13 @@
+domain: example.com
+docker:
+  repository: example
+networks:
+  internal:
+    name: internal
+services:
+  ssh:
+    ports:
+      - "22222:22"
+ssh:
+  authorized_keys: []
+volumes: {}

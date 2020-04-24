@@ -5,16 +5,13 @@ set -u
 set -o pipefail
 set -x
 
-apt() {
+apt-get() {
     (
         export TERM=dumb
         export DEBIAN_FRONTEND=noninteractive
-        command apt --yes "$@"
+        command apt-get --yes "$@"
     )
 }
-
-# https://github.com/bitnami/minideb/blob/master/mkimage
-echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/force-unsafe-io
 
 sc-disable() {
     for service in "$@"; do
@@ -29,15 +26,15 @@ sc-disable \
     unattended-upgrades
 
 # system upgrade
-apt update
-apt upgrade --purge
-apt dist-upgrade --purge
+apt-get update
+apt-get upgrade --purge
+apt-get dist-upgrade --purge
 
 # clear manual package selection
 apt-mark auto $(apt-mark showmanual)
 
 # install everything we need
-apt install --no-install-recommends \
+apt-get install --no-install-recommends \
     docker-compose \
     docker.io \
     hddtemp \
@@ -55,10 +52,11 @@ apt install --no-install-recommends \
     zsh
 
 # cleanup
-apt autoremove --purge
-apt clean
+apt-get autoremove --purge
+apt-get clean
 
 rm -rfv \
+    /root/snap
     /var/lib/command-not-found \
     /var/log/unattended-upgrades
 
