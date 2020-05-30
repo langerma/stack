@@ -20,17 +20,6 @@ sc-disable() {
     done
 }
 
-# disable services
-sc-disable \
-    atd \
-    unattended-upgrades
-
-# make our system lean
-cat > /etc/apt/apt.conf.d/99no-recommended <<EOF
-APT::Install-Suggests "0";
-APT::Install-Recommends "0";
-EOF
-
 # system upgrade
 apt-get update
 apt-get upgrade --purge
@@ -41,6 +30,7 @@ apt-mark auto $(apt-mark showmanual)
 
 # install everything we need
 apt-get install \
+    docker.io \
     docker-compose \
     hddtemp \
     iotop \
@@ -61,11 +51,6 @@ apt-get install \
 apt-get autoremove --purge
 apt-get clean
 
-rm -rfv \
-    /root/snap
-    /var/lib/command-not-found \
-    /var/log/unattended-upgrades
-
 # generate proper locale
 locale-gen en_US.UTF-8
 update-locale LANG=en_US.UTF-8
@@ -76,13 +61,18 @@ ln -nfs /run/systemd/resolve/resolv.conf /etc/resolv.conf
 systemctl restart systemd-resolved
 systemctl restart systemd-networkd
 
-# silent login
-eval USER_HOME="~$SUDO_USER"
-touch ${USER_HOME}/.hushlogin
+# load wireguard modules
+cat > /etc/modules-load.d/wireguard.conf <<EOF
+wireguard
+iptable_nat
+ip6table_nat
+EOF
 
-# automatic sudo login
-sed -i -e 's/^%sudo.*/%sudo ALL=(ALL:ALL) NOPASSWD:ALL/g' /etc/sudoers
-echo 'exec sudo -Hi' > ${USER_HOME}/.bash_login
+# enable forwarding
+cat > /etc/sysctl.d/wireguard.conf <<EOF
+net.ipv4.ip_forward = 1
+net.ipv6.conf.all.forwarding = 1
+EOF
 
 # use zsh
 chsh -s /usr/bin/zsh root
