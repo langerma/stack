@@ -1,0 +1,2 @@
+#!/bin/sh
+exec stack exec postgres psql -U postgres

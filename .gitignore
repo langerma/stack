@@ -1,3 +1,4 @@
 .direnv/
-config.yaml
+.env
+services.yaml
 stack.yaml

@@ -1,0 +1,19 @@
+depends_on:
+  - postgres
+networks:
+  internal: {}
+environment:
+  DB_VENDOR: POSTGRES
+  DB_ADDR: postgres
+  DB_PORT: 5432
+  DB_USER: postgres
+  DB_PASSWORD: postgres
+  DB_SCHEMA: public
+  DB_DATABASE: keycloak
+  PROXY_ADDRESS_FORWARDING: "true"
+  KEYCLOAK_LOGLEVEL: INFO
+labels:
+  stack.short: id
+  traefik.enable: true
+  traefik.http.routers.keycloak.tls.certresolver: default
+  traefik.http.services.keycloak.loadbalancer.server.port: 8080

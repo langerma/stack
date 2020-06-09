@@ -1,0 +1,15 @@
+environment:
+  AUTH_HOST: auth.$STACK_DOMAIN
+  COOKIE_DOMAIN: $STACK_DOMAIN
+  DEFAULT_PROVIDER: oidc
+  PROVIDERS_OIDC_ISSUER_URL: https://id.$STACK_DOMAIN/auth/realms/master
+labels:
+  stack.short: auth
+  traefik.enable: true
+  traefik.http.routers.traefik-auth.tls.certresolver: default
+  traefik.http.routers.traefik-auth.middlewares: traefik-auth
+  traefik.http.services.traefik-auth.loadbalancer.server.port: 4181
+  traefik.http.middlewares.traefik-auth.forwardauth.address: http://traefik-auth:4181
+  traefik.http.middlewares.traefik-auth.forwardauth.authResponseHeaders: X-Forwarded-User
+networks:
+  internal:

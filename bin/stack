@@ -18,54 +18,66 @@ def merge(a, b):
     return always_merger.merge(a, b)
 
 
-config = load("config.yaml")
+services = load("services.yaml")
+
+networks = {
+    "internal": {
+        "name": "internal",
+        "ipam": {
+            "driver": "default",
+            "config": [
+                {
+                    "subnet": "$STACK_SUBNET"
+                }
+            ]
+        }
+    }
+}
+
+volumes = {}
 
 # generate stack compose file
-for name, overrides in config["services"].items():
+for name, overrides in services.items():
     dirname = name.replace("-", "/")
 
-    config["services"][name] = {
+    services[name] = {
         "build": {
             "context": dirname,
         },
         "container_name": name,
-        "domainname": config["domain"],
+        "domainname": "$STACK_DOMAIN",
         "hostname": name,
-        "image": "{}/{}".format(
-            config["docker"]["repository"],
-            name,
-        ),
-        "networks": {},
+        "image": "$STACK_REPOSITORY/{}".format(name),
+        "labels": {
+            "stack.domain": "$STACK_DOMAIN",
+            "stack.service": name,
+        },
         "restart": "always",
-        "volumes": {},
+        "volumes": [],
     }
 
-    config["services"][name] = merge(config["services"][name], load(
+    services[name] = merge(services[name], load(
         "{}/service.yaml".format(dirname)))
 
-    config["services"][name] = merge(config["services"][name], overrides)
+    if overrides is not None:
+        services[name] = merge(services[name], overrides)
 
-    volumes = []
-
-    for volume in config["services"][name]["volumes"]:
+    for volume in services[name]["volumes"]:
         if volume["type"] != "volume":
             continue
 
         volume["source"] = "{}_{}".format(name, volume["source"])
 
-        if volume["source"] not in config["volumes"]:
-            config["volumes"][volume["source"]] = {
-                "name": volume["source"],
-            }
-
-        volumes.append(volume)
+        volumes[volume["source"]] = {
+            "name": volume["source"],
+        }
 
 with open("stack.yaml", "w") as file:
     file.write(yaml.dump({
         "version": "3.7",
-        "services": config["services"],
-        "volumes": config["volumes"],
-        "networks": config["networks"],
+        "services": services,
+        "volumes": volumes,
+        "networks": networks,
     }))
 
 os.execvp("docker-compose", [

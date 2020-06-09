@@ -1,5 +1,8 @@
+hostname: $STACK_DOMAIN
 networks:
   internal:
+ports:
+  - "22222:22"
 volumes:
   - type: volume
     source: config

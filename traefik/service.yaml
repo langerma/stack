@@ -1,28 +1,31 @@
 command:
-  - "--global.checkNewVersion=false"
-  - "--global.sendAnonymousUsage=false"
-  - "--log.level=INFO"
-  - "--api.insecure=true"
+  - "--api=true"
   - "--api.dashboard=true"
-  - "--api.debug=false"
-  - "--ping.entrypoint=http"
-  - "--providers.file.filename=/etc/traefik/dynamic.toml"
-  - "--providers.file.watch=true"
-  - "--providers.docker.exposedbydefault=false"
-  - "--providers.docker.network=internal"
-  - "--serversTransport.insecureskipverify=true"
-  - "--entryPoints.http.address=:80"
-  - "--entryPoints.https.address=:443"
+  - "--api.insecure=true"
+  - "--certificatesresolvers.default.acme.email=hostmaster@$STACK_DOMAIN"
   - "--certificatesresolvers.default.acme.storage=/config/acme.json"
   - "--certificatesresolvers.default.acme.tlschallenge=true"
+  - "--entrypoints.http.address=:80"
+  - "--entrypoints.http.http.redirections.entryPoint.scheme=https"
+  - "--entrypoints.http.http.redirections.entryPoint.to=https"
+  - "--entrypoints.https.address=:443"
+  - "--global.checknewversion=false"
+  - "--global.sendanonymoususage=false"
+  - "--providers.docker.exposedbydefault=false"
+  - "--providers.docker.network=internal"
+  - '--providers.docker.defaultrule=Host(`{{ with $$x := index .Labels "stack.short" }}{{ $$x }}{{ else }}{{ index .Labels "stack.service" }}{{ end }}.{{ index .Labels "stack.domain" }}`)'
+extra_hosts:
+  - "host.docker.internal:$STACK_HOST_IP"
 labels:
-  traefik.enable: "true"
-  traefik.http.routers.traefik.middlewares: default@file,traefik-auth
-  traefik.http.routers.traefik.entrypoints: https
-  traefik.http.routers.traefik.service: api@internal
-  traefik.http.middlewares.traefik-auth.basicauth.users: "hostmaster:!"
+  traefik.enable: true
+  traefik.http.routers.traefik.tls.certresolver: default
+  traefik.http.routers.traefik.middlewares: traefik-auth
+  traefik.http.services.traefik.loadbalancer.server.port: 8080
 networks:
   internal:
+ports:
+  - "80:80"
+  - "443:443"
 volumes:
   - type: volume
     source: config

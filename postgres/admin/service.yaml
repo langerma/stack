@@ -1,0 +1,19 @@
+depends_on:
+  - postgres
+environment:
+  PGADMIN_CONFIG_SERVER_MODE: "False"
+  PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False"
+  PGADMIN_DEFAULT_EMAIL: hostmaster@$STACK_DOMAIN
+  PGADMIN_DEFAULT_PASSWORD: password
+labels:
+  stack.short: pgadmin
+  traefik.enable: true
+  traefik.http.routers.postgres-admin.tls.certresolver: default
+  traefik.http.routers.postgres-admin.middlewares: traefik-auth
+  traefik.http.services.postgres-admin.loadbalancer.server.port: 80
+networks:
+  internal: {}
+volumes:
+  - type: volume
+    source: data
+    target: /var/lib/pgadmin
