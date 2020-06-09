@@ -1,0 +1,2 @@
+#!/bin/sh
+exec stack exec --user www-data nextcloud php /var/www/html/occ "$@"
