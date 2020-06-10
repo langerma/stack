@@ -1,0 +1,11 @@
+build:
+  context: nextcloud
+depends_on:
+  - nextcloud
+entrypoint: /cron.sh
+image: $STACK_REPOSITORY/nextcloud
+networks:
+  internal:
+volumes:
+  - nextcloud_html:/var/www/html
+  - nextcloud_data:/data

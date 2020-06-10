@@ -11,8 +11,8 @@ volumes:
     source: home
     target: /root
   - type: bind
-    source: ./
-    target: /stack
+    source: $STACK_ROOT
+    target: $STACK_ROOT
   - type: bind
     source: /var/run/docker.sock
     target: /var/run/docker.sock

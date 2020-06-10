@@ -1,0 +1,3 @@
+[submodule "odoo/addons/13.0/auth_oauth_keycloak"]
+	path = odoo/addons/13.0/auth_oauth_keycloak
+	url = https://github.com/Mint-System/Odoo-App-Auth-OAuth-Keycloak

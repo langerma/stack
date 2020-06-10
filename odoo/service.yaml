@@ -1,0 +1,30 @@
+command:
+  - "--proxy-mode"
+  - "--without-demo=all"
+environment:
+  HOST: postgres
+  USER: odoo
+  PASSWORD: odoo
+labels:
+  stack.short: do
+  traefik.enable: "true"
+  traefik.http.routers.odoo.rule: Host(`do.$STACK_DOMAIN`)
+  traefik.http.routers.odoo.service: odoo
+  traefik.http.routers.odoo.tls.certresolver: default
+  traefik.http.services.odoo.loadbalancer.server.port: 8069
+  traefik.http.routers.odoo-chat.rule: Host(`do.$STACK_DOMAIN`) && PathPrefix(`/longpolling`)
+  traefik.http.routers.odoo-chat.service: odoo-chat
+  traefik.http.routers.odoo-chat.tls.certresolver: default
+  traefik.http.services.odoo-chat.loadbalancer.server.port: 8072
+networks:
+  internal:
+volumes:
+  - type: bind
+    source: $STACK_ROOT/odoo/odoo.conf
+    target: /etc/odoo/odoo.conf
+  - type: volume
+    source: data
+    target: /var/lib/odoo
+  - type: bind
+    source: $STACK_ROOT/odoo/addons
+    target: /var/lib/odoo/addons

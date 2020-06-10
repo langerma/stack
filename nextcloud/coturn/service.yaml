@@ -1,0 +1,14 @@
+command: >-
+  -n --log-file=stdout
+  --fingerprint
+  --stale-nonce
+  --use-auth-secret
+  --no-multicast-peers
+  --realm=$STACK_DOMAIN
+  --external-ip='$$(detect-external-ip)'
+  --static-auth-secret=$COTURN_SECRET
+network_mode: host
+volumes:
+  - type: volume
+    source: data
+    target: /var/lib/coturn

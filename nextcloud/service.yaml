@@ -8,19 +8,18 @@ environment:
   NEXTCLOUD_ADMIN_USER: admin
   NEXTCLOUD_ADMIN_PASSWORD: password
   NEXTCLOUD_DATA_DIR: /data
-  NEXTCLOUD_TRUSTED_DOMAINS: next.$STACK_DOMAIN
-  APACHE_DISABLE_REWRITE_IP: "1"
+  NEXTCLOUD_TRUSTED_DOMAINS: $STACK_DOMAIN
   TRUSTED_PROXIES: $STACK_SUBNET
   OVERWRITEPROTOCOL: https
 labels:
-  stack.short: next
   traefik.enable: true
-  traefik.http.middlewares.nextcloud-caldav.redirectregex.permanent: true
-  traefik.http.middlewares.nextcloud-caldav.redirectregex.regex: "^https://(.*)/.well-known/(card|cal)dav"
-  traefik.http.middlewares.nextcloud-caldav.redirectregex.replacement: "https://$${1}/remote.php/dav/"
-  traefik.http.routers.nextcloud.middlewares: secure-headers,nextcloud-caldav
+  traefik.http.routers.nextcloud.rule: Host(`$STACK_DOMAIN`)
+  traefik.http.routers.nextcloud.middlewares: nextcloud-caldav
   traefik.http.routers.nextcloud.tls.certresolver: default
   traefik.http.services.nextcloud.loadbalancer.server.port: 80
+  traefik.http.middlewares.nextcloud-caldav.redirectregex.permanent: true
+  traefik.http.middlewares.nextcloud-caldav.redirectregex.regex: "/.well-known/(card|cal)dav"
+  traefik.http.middlewares.nextcloud-caldav.redirectregex.replacement: "/remote.php/dav/"
 networks:
   internal:
 volumes:

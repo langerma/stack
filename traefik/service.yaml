@@ -21,11 +21,6 @@ labels:
   traefik.http.routers.traefik.tls.certresolver: default
   traefik.http.routers.traefik.middlewares: traefik-auth
   traefik.http.services.traefik.loadbalancer.server.port: 8080
-  traefik.http.middlewares.secure-headers.headers.browserxssfilter: true
-  traefik.http.middlewares.secure-headers.headers.contenttypenosniff: true
-  traefik.http.middlewares.secure-headers.headers.sslredirect: true
-  traefik.http.middlewares.secure-headers.headers.stsincludesubdomains: true
-  traefik.http.middlewares.secure-headers.headers.stsseconds: 31536000
 networks:
   internal:
 ports:

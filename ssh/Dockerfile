@@ -16,12 +16,14 @@ RUN export TERM=dumb DEBIAN_FRONTEND=noninteractive \
     automake \
     build-essential \
     colordiff \
+    docker.io \
     docker-compose \
     hddtemp \
     httpie \
     iotop \
     ipcalc \
     jq \
+    ldnsutils \
     libbz2-dev \
     libffi-dev \
     libgdbm-dev \
@@ -62,7 +64,9 @@ RUN export TERM=dumb DEBIAN_FRONTEND=noninteractive \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /etc/ssh/ssh_host_*_key*
 
-ADD https://github.com/just-containers/s6-overlay/releases/download/v1.22.1.0/s6-overlay-amd64.tar.gz /tmp/s6-overlay-amd64.tar.gz
+ADD https://github.com/just-containers/s6-overlay/releases/latest/download/s6-overlay-amd64.tar.gz \
+    /tmp/s6-overlay-amd64.tar.gz
+
 RUN export TERM=dumb DEBIAN_FRONTEND=noninteractive \
     && tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude="./bin" \
     && tar xzf /tmp/s6-overlay-amd64.tar.gz -C /usr ./bin \

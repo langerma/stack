@@ -1,0 +1,17 @@
+cap_add:
+  - NET_ADMIN
+environment:
+  SUBSPACE_HTTP_HOST: vpn.$STACK_DOMAIN
+  SUBSPACE_HTTP_ADDR: $STACK_HOST_IP:51821
+  SUBSPACE_LETSENCRYPT: "false"
+  SUBSPACE_NAMESERVER: "127.0.0.1"
+labels:
+  stack.short: vpn
+  traefik.enable: "true"
+  traefik.http.routers.subspace.tls.certresolver: default
+  traefik.http.services.subspace.loadbalancer.server.port: 51821
+network_mode: host
+volumes:
+  - type: volume
+    source: data
+    target: /data

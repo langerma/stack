@@ -63,6 +63,9 @@ for name, overrides in services.items():
         services[name] = merge(services[name], overrides)
 
     for volume in services[name]["volumes"]:
+        if type(volume) is str:
+            continue
+
         if volume["type"] != "volume":
             continue
 
