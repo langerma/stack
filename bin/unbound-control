@@ -1,2 +1,2 @@
 #!/bin/sh
-exec stack exec unbound unbound-control "$@"
+exec stack exec dns unbound-control "$@"

@@ -1,0 +1,4 @@
+#!/usr/bin/with-contenv bash
+
+s6-echo "Starting unbound as ${DNSMASQ_USER}"
+s6-setuidgid ${DNSMASQ_USER} /usr/sbin/unbound -d

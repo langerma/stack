@@ -1,0 +1,22 @@
+environment:
+  WEBPASSWORD: $PIHOLE_ADMIN_PASSWORD
+  DNS1: "127.0.0.1#5353"
+  DNS2: "9.9.9.9#53"
+hostname: pihole
+labels:
+  traefik.enable: "true"
+  traefik.http.routers.dns.tls.certresolver: default
+  traefik.http.routers.dns.middlewares: traefik-auth
+  traefik.http.services.dns.loadbalancer.server.port: 80
+networks:
+  internal:
+ports:
+  - "53:53/tcp"
+  - "53:53/udp"
+volumes:
+  - type: volume
+    source: pihole
+    target: /etc/pihole
+  - type: bind
+    source: $STACK_ROOT/dns/static.conf
+    target: /etc/unbound/static.conf
