@@ -12,6 +12,8 @@ environment:
   DB_DATABASE: keycloak
   PROXY_ADDRESS_FORWARDING: "true"
   KEYCLOAK_LOGLEVEL: INFO
+  KEYCLOAK_USER: $KEYCLOAK_USER
+  KEYCLOAK_PASSWORD: $KEYCLOAK_PASSWORD
 labels:
   stack.short: id
   traefik.enable: true

@@ -1,4 +1,6 @@
 hostname: $STACK_DOMAIN
+environment:
+  SSH_AUTHORIZED_KEYS: $SSH_AUTHORIZED_KEYS
 networks:
   internal:
 ports:

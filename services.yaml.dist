@@ -1,18 +1,6 @@
 keycloak:
-  environment:
-    KEYCLOAK_USER: user
-    KEYCLOAK_PASSWORD: password
-
 postgres:
 postgres-admin:
-
 ssh:
-  environment:
-    SSH_AUTHORIZED_KEYS: ""
-
 traefik:
 traefik-auth:
-  environment:
-    PROVIDERS_OIDC_CLIENT_ID: traefik-auth
-    PROVIDERS_OIDC_CLIENT_SECRET: ""
-    SECRET: ""

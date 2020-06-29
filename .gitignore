@@ -2,3 +2,4 @@
 .env
 services.yaml
 stack.yaml
+docker/
