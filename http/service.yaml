@@ -16,11 +16,6 @@ command:
   - '--providers.docker.defaultrule=Host(`{{ with $$x := index .Labels "stack.short" }}{{ $$x }}{{ else }}{{ index .Labels "stack.service" }}{{ end }}.{{ index .Labels "stack.domain" }}`)'
 extra_hosts:
   - "host.docker.internal:$STACK_HOST_IP"
-labels:
-  traefik.enable: true
-  traefik.http.routers.traefik.tls.certresolver: default
-  traefik.http.routers.traefik.middlewares: traefik-auth
-  traefik.http.services.traefik.loadbalancer.server.port: 8080
 networks:
   internal:
 ports:

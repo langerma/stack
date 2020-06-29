@@ -6,7 +6,6 @@ environment:
   SUBSPACE_LETSENCRYPT: "false"
   SUBSPACE_NAMESERVER: "127.0.0.1"
 labels:
-  stack.short: vpn
   traefik.enable: "true"
   traefik.http.routers.subspace.tls.certresolver: default
   traefik.http.services.subspace.loadbalancer.server.port: 51821
