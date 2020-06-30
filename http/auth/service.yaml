@@ -1,5 +1,8 @@
+depends_on:
+  - http
+  - keycloak
 environment:
-  AUTH_HOST: auth.$STACK_DOMAIN
+  AUTH_HOST: id.$STACK_DOMAIN
   COOKIE_DOMAIN: $STACK_DOMAIN
   DEFAULT_PROVIDER: oidc
   PROVIDERS_OIDC_ISSUER_URL: https://id.$STACK_DOMAIN/auth/realms/master
@@ -7,8 +10,8 @@ environment:
   PROVIDERS_OIDC_CLIENT_SECRET: $TRAEFIK_OIDC_CLIENT_SECRET
   SECRET: $TRAEFIK_OIDC_SECRET
 labels:
-  stack.short: auth
   traefik.enable: true
+  traefik.http.routers.http-auth.rule: Host(`id.$STACK_DOMAIN`) && PathPrefix(`/_oauth`)
   traefik.http.routers.http-auth.tls.certresolver: default
   traefik.http.routers.http-auth.middlewares: http-auth
   traefik.http.services.http-auth.loadbalancer.server.port: 4181

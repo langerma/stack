@@ -46,6 +46,9 @@ for name, overrides in services.items():
         },
         "container_name": name,
         "domainname": "$STACK_DOMAIN",
+        "healthcheck": {
+            "disable": True,
+        },
         "hostname": name,
         "image": "$STACK_DOMAIN/{}".format(name),
         "labels": {

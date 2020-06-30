@@ -1,7 +1,7 @@
 command:
   - "--api=true"
   - "--api.dashboard=true"
-  - "--api.insecure=true"
+  - "--api.insecure=$TRAEFIK_DASHBOARD"
   - "--certificatesresolvers.default.acme.email=hostmaster@$STACK_DOMAIN"
   - "--certificatesresolvers.default.acme.storage=/config/acme.json"
   - "--certificatesresolvers.default.acme.tlschallenge=true"
@@ -11,11 +11,18 @@ command:
   - "--entrypoints.https.address=:443"
   - "--global.checknewversion=false"
   - "--global.sendanonymoususage=false"
+  - "--log.level=$TRAEFIK_LOG_LEVEL"
   - "--providers.docker.exposedbydefault=false"
   - "--providers.docker.network=internal"
   - '--providers.docker.defaultrule=Host(`{{ with $$x := index .Labels "stack.short" }}{{ $$x }}{{ else }}{{ index .Labels "stack.service" }}{{ end }}.{{ index .Labels "stack.domain" }}`)'
 extra_hosts:
   - "host.docker.internal:$STACK_HOST_IP"
+labels:
+  stack.short: traefik
+  traefik.enable: $TRAEFIK_DASHBOARD
+  traefik.http.routers.traefik.tls.certresolver: default
+  traefik.http.routers.traefik.middlewares: http-auth
+  traefik.http.services.traefik.loadbalancer.server.port: 8080
 networks:
   internal:
 ports:

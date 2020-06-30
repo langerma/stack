@@ -2,7 +2,8 @@ environment:
   WEBPASSWORD: $PIHOLE_ADMIN_PASSWORD
   VIRTUAL_HOST: dns.$STACK_DOMAIN
   DNS1: "127.0.0.1#5353"
-  DNS2: "9.9.9.9#53"
+  DNS2: "no"
+  DNSSEC: "true"
 hostname: pihole
 labels:
   traefik.enable: "true"
@@ -18,6 +19,3 @@ volumes:
   - type: volume
     source: pihole
     target: /etc/pihole
-  - type: bind
-    source: $STACK_ROOT/dns/static.conf
-    target: /etc/unbound/static.conf
