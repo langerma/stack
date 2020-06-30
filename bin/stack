@@ -47,7 +47,7 @@ for name, overrides in services.items():
         "container_name": name,
         "domainname": "$STACK_DOMAIN",
         "hostname": name,
-        "image": "$STACK_REPOSITORY/{}".format(name),
+        "image": "$STACK_DOMAIN/{}".format(name),
         "labels": {
             "stack.domain": "$STACK_DOMAIN",
             "stack.service": name,

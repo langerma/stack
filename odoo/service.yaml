@@ -27,4 +27,4 @@ volumes:
     target: /var/lib/odoo
   - type: bind
     source: $STACK_ROOT/odoo/addons
-    target: /var/lib/odoo/addons
+    target: /mnt/extra-addons

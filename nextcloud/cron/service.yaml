@@ -3,7 +3,7 @@ build:
 depends_on:
   - nextcloud
 entrypoint: /cron.sh
-image: $STACK_REPOSITORY/nextcloud
+image: $STACK_DOMAIN/nextcloud
 networks:
   internal:
 volumes:
