@@ -9,10 +9,10 @@ environment:
 labels:
   stack.short: auth
   traefik.enable: true
-  traefik.http.routers.traefik-auth.tls.certresolver: default
-  traefik.http.routers.traefik-auth.middlewares: traefik-auth
-  traefik.http.services.traefik-auth.loadbalancer.server.port: 4181
-  traefik.http.middlewares.traefik-auth.forwardauth.address: http://traefik-auth:4181
-  traefik.http.middlewares.traefik-auth.forwardauth.authResponseHeaders: X-Forwarded-User
+  traefik.http.routers.http-auth.tls.certresolver: default
+  traefik.http.routers.http-auth.middlewares: http-auth
+  traefik.http.services.http-auth.loadbalancer.server.port: 4181
+  traefik.http.middlewares.http-auth.forwardauth.address: http://http-auth:4181
+  traefik.http.middlewares.http-auth.forwardauth.authResponseHeaders: X-Forwarded-User
 networks:
   internal:

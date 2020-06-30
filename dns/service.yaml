@@ -1,12 +1,13 @@
 environment:
   WEBPASSWORD: $PIHOLE_ADMIN_PASSWORD
+  VIRTUAL_HOST: dns.$STACK_DOMAIN
   DNS1: "127.0.0.1#5353"
   DNS2: "9.9.9.9#53"
 hostname: pihole
 labels:
   traefik.enable: "true"
   traefik.http.routers.dns.tls.certresolver: default
-  traefik.http.routers.dns.middlewares: traefik-auth
+  traefik.http.routers.dns.middlewares: http-auth
   traefik.http.services.dns.loadbalancer.server.port: 80
 networks:
   internal:

@@ -9,7 +9,7 @@ labels:
   stack.short: pgadmin
   traefik.enable: true
   traefik.http.routers.postgres-admin.tls.certresolver: default
-  traefik.http.routers.postgres-admin.middlewares: traefik-auth
+  traefik.http.routers.postgres-admin.middlewares: http-auth
   traefik.http.services.postgres-admin.loadbalancer.server.port: 80
 networks:
   internal: {}
