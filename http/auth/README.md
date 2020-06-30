@@ -5,13 +5,13 @@ Single-Sign-On page.
 
 ## OpenID Configuration
 
-1. Login to `https://id.<STACK_DOMAIN>/auth/admin/master/console/`
+1. Login to `https://id.$STACK_DOMAIN/auth/admin/master/console/`
 2. Create new Client
    1. Client ID: `traefik-auth`
    2. Client Protocol: `openid-connect`
 3. Configure Client:
    1. Access Type: `confidential`
-   2. Valid Redirect URIs: `https://id.<STACK_DOMAIN>/_oauth`
+   2. Valid Redirect URIs: `https://id.$STACK_DOMAIN/_oauth`
    3. Copy Secret from `Clients > traefik-auth > Credentials`
 
 ## Configuration

@@ -149,30 +149,10 @@ ip addr add "${SUBSPACE_IPV6_GW}/${SUBSPACE_IPV6_CIDR}" dev wg0
 wg setconf wg0 /data/wireguard/server.conf
 ip link set wg0 up
 
-# subspace service
-if ! test -d /etc/service/subspace; then
-  mkdir /etc/service/subspace
-  cat <<RUNIT >/etc/service/subspace/run
-#!/bin/sh
-source /etc/envvars
 exec /usr/bin/subspace \
-  "--http-host=${SUBSPACE_HTTP_HOST}" \
-  "--http-addr=${SUBSPACE_HTTP_ADDR}" \
-  "--http-insecure=${SUBSPACE_HTTP_INSECURE}" \
-  "--backlink=${SUBSPACE_BACKLINK}" \
-  "--letsencrypt=${SUBSPACE_LETSENCRYPT}" \
-  "--theme=${SUBSPACE_THEME}"
-RUNIT
-  chmod +x /etc/service/subspace/run
-
-  # subspace service log
-  mkdir /etc/service/subspace/log
-  mkdir /etc/service/subspace/log/main
-  cat <<RUNIT >/etc/service/subspace/log/run
-#!/bin/sh
-exec svlogd -tt ./main
-RUNIT
-  chmod +x /etc/service/subspace/log/run
-fi
-
-exec "$@"
+  --http-host=${SUBSPACE_HTTP_HOST} \
+  --http-addr=${SUBSPACE_HTTP_ADDR} \
+  --http-insecure=${SUBSPACE_HTTP_INSECURE} \
+  --backlink=${SUBSPACE_BACKLINK} \
+  --letsencrypt=${SUBSPACE_LETSENCRYPT} \
+  --theme=${SUBSPACE_THEME}

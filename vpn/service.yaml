@@ -1,5 +1,9 @@
 cap_add:
   - NET_ADMIN
+depends_on:
+  - dns
+  - http
+  - keycloak
 environment:
   SUBSPACE_HTTP_HOST: vpn.$STACK_DOMAIN
   SUBSPACE_HTTP_ADDR: $STACK_HOST_IP:51821
@@ -7,6 +11,8 @@ environment:
   SUBSPACE_NAMESERVER: "127.0.0.1"
 labels:
   traefik.enable: "true"
+  traefik.http.routers.subspace.entrypoints: https
+  traefik.http.routers.subspace.middlewares: secure-headers@file
   traefik.http.routers.subspace.tls.certresolver: default
   traefik.http.services.subspace.loadbalancer.server.port: 51821
 network_mode: host

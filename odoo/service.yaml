@@ -6,14 +6,17 @@ environment:
   USER: odoo
   PASSWORD: odoo
 labels:
-  stack.short: do
   traefik.enable: "true"
   traefik.http.routers.odoo.rule: Host(`do.$STACK_DOMAIN`)
   traefik.http.routers.odoo.service: odoo
+  traefik.http.routers.odoo.entrypoints: https
+  traefik.http.routers.odoo.middlewares: secure-headers@file
   traefik.http.routers.odoo.tls.certresolver: default
   traefik.http.services.odoo.loadbalancer.server.port: 8069
   traefik.http.routers.odoo-chat.rule: Host(`do.$STACK_DOMAIN`) && PathPrefix(`/longpolling`)
   traefik.http.routers.odoo-chat.service: odoo-chat
+  traefik.http.routers.odoo-chat.entrypoints: https
+  traefik.http.routers.odoo-chat.middlewares: secure-headers@file
   traefik.http.routers.odoo-chat.tls.certresolver: default
   traefik.http.services.odoo-chat.loadbalancer.server.port: 8072
 networks:

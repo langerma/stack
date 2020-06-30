@@ -15,7 +15,9 @@ environment:
   KEYCLOAK_USER: $KEYCLOAK_USER
   KEYCLOAK_PASSWORD: $KEYCLOAK_PASSWORD
 labels:
-  stack.short: id
   traefik.enable: true
+  traefik.http.routers.keycloak.rule: Host(`id.$STACK_DOMAIN`)
+  traefik.http.routers.keycloak.entrypoints: https
+  traefik.http.routers.keycloak.middlewares: secure-headers@file
   traefik.http.routers.keycloak.tls.certresolver: default
   traefik.http.services.keycloak.loadbalancer.server.port: 8080

@@ -14,7 +14,8 @@ environment:
 labels:
   traefik.enable: true
   traefik.http.routers.nextcloud.rule: Host(`$STACK_DOMAIN`)
-  traefik.http.routers.nextcloud.middlewares: nextcloud-caldav
+  traefik.http.routers.nextcloud.entrypoints: https
+  traefik.http.routers.nextcloud.middlewares: secure-headers@file,nextcloud-caldav
   traefik.http.routers.nextcloud.tls.certresolver: default
   traefik.http.services.nextcloud.loadbalancer.server.port: 80
   traefik.http.middlewares.nextcloud-caldav.redirectregex.permanent: true

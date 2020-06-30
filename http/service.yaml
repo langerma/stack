@@ -14,15 +14,18 @@ command:
   - "--log.level=$TRAEFIK_LOG_LEVEL"
   - "--providers.docker.exposedbydefault=false"
   - "--providers.docker.network=internal"
-  - '--providers.docker.defaultrule=Host(`{{ with $$x := index .Labels "stack.short" }}{{ $$x }}{{ else }}{{ index .Labels "stack.service" }}{{ end }}.{{ index .Labels "stack.domain" }}`)'
+  - '--providers.docker.defaultrule=Host(`{{ index .Labels "stack.service" }}.{{ index .Labels "stack.domain" }}`)'
+  - "--providers.file.filename=/etc/traefik/dynamic.yaml"
 extra_hosts:
   - "host.docker.internal:$STACK_HOST_IP"
 labels:
-  stack.short: traefik
   traefik.enable: $TRAEFIK_DASHBOARD
+  traefik.http.routers.traefik.rule: Host(`traefik.$STACK_DOMAIN`)
+  traefik.http.routers.traefik.entrypoints: https
+  traefik.http.routers.traefik.middlewares: secure-headers@file,http-auth
   traefik.http.routers.traefik.tls.certresolver: default
-  traefik.http.routers.traefik.middlewares: http-auth
   traefik.http.services.traefik.loadbalancer.server.port: 8080
+
 networks:
   internal:
 ports:

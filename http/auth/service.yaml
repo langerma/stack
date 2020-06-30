@@ -12,8 +12,9 @@ environment:
 labels:
   traefik.enable: true
   traefik.http.routers.http-auth.rule: Host(`id.$STACK_DOMAIN`) && PathPrefix(`/_oauth`)
+  traefik.http.routers.http-auth.entrypoints: https
+  traefik.http.routers.http-auth.middlewares: secure-headers@file,http-auth
   traefik.http.routers.http-auth.tls.certresolver: default
-  traefik.http.routers.http-auth.middlewares: http-auth
   traefik.http.services.http-auth.loadbalancer.server.port: 4181
   traefik.http.middlewares.http-auth.forwardauth.address: http://http-auth:4181
   traefik.http.middlewares.http-auth.forwardauth.authResponseHeaders: X-Forwarded-User
